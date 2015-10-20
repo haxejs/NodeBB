@@ -1,12 +1,18 @@
 "use strict";
 
-var meta = require('./../meta'),
-	user = require('./../user'),
-	plugins = require('./../plugins'),
-	widgets = require('../widgets'),
-
+var async = require('async'),
 	validator = require('validator'),
-	nconf = require('nconf');
+	nconf = require('nconf'),
+
+	meta = require('../meta'),
+	user = require('../user'),
+	posts = require('../posts'),
+	topics = require('../topics'),
+	categories = require('../categories'),
+	privileges = require('../privileges'),
+	plugins = require('../plugins'),
+	helpers = require('./helpers'),
+	widgets = require('../widgets');
 
 var apiController = {};
 
@@ -63,6 +69,7 @@ apiController.getConfig = function(req, res, next) {
 	config.postsPerPage = meta.config.postsPerPage || 20;
 	config.maximumFileSize = meta.config.maximumFileSize;
 	config['theme:id'] = meta.config['theme:id'];
+	config['theme:src'] = meta.config['theme:src'];
 	config.defaultLang = meta.config.defaultLang || 'en_GB';
 	config.userLang = req.query.lang || config.defaultLang;
 	config.environment = process.env.NODE_ENV;
@@ -124,5 +131,38 @@ apiController.renderWidgets = function(req, res, next) {
 		res.status(200).json(widgets);
 	});
 };
+
+apiController.getObject = function(req, res, next) {
+	var methods = {
+		post: {
+			canRead: privileges.posts.can,
+			data: posts.getPostData
+		},
+		topic: {
+			canRead: privileges.topics.can,
+			data: topics.getTopicData
+		},
+		category: {
+			canRead: privileges.categories.can,
+			data: categories.getCategoryData
+		}
+	};
+	if (!methods[req.params.type]) {
+		return next();
+	}
+	async.parallel({
+		canRead: async.apply(methods[req.params.type].canRead, 'read', req.params.id, req.uid),
+		data: async.apply(methods[req.params.type].data, req.params.id)
+	}, function (err, results) {
+		if (err || !results.data) {
+			return next(err);
+		}
+		if (!results.canRead) {
+			return helpers.notAllowed(req, res);
+		}
+		res.json(results.data);
+	});
+};
+
 
 module.exports = apiController;

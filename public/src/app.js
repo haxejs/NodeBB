@@ -92,7 +92,7 @@ app.cacheBuster = null;
 
 			switch(url_parts[0]) {
 				case 'user':
-					room = 'user/' + ajaxify.data.theirid;
+					room = 'user/' + ajaxify.data ? ajaxify.data.theirid : 0;
 				break;
 				case 'topic':
 					room = 'topic_' + url_parts[1];
@@ -241,6 +241,8 @@ app.cacheBuster = null;
 	app.processPage = function () {
 		highlightNavigationLink();
 
+		utils.overrideTimeago();
+
 		$('.timeago').timeago();
 
 		utils.makeNumbersHumanReadable($('.human-readable-number'));
@@ -381,7 +383,8 @@ app.cacheBuster = null;
 	};
 
 	function createHeaderTooltips() {
-		if (utils.findBootstrapEnvironment() === 'xs') {
+		var env = utils.findBootstrapEnvironment();
+		if (env === 'xs' || env === 'sm') {
 			return;
 		}
 		$('#header-menu li a[title]').each(function() {
@@ -466,11 +469,13 @@ app.cacheBuster = null;
 			return;
 		}
 
-		translator.translate('[[global:' + status + ']]', function(translated) {
-			el.removeClass('online offline dnd away')
-				.addClass(status)
-				.attr('title', translated)
-				.attr('data-original-title', translated);
+		require(['translator'], function(translator) {
+			translator.translate('[[global:' + status + ']]', function(translated) {
+				el.removeClass('online offline dnd away')
+					.addClass(status)
+					.attr('title', translated)
+					.attr('data-original-title', translated);
+			});
 		});
 	};
 
