@@ -16,6 +16,7 @@ var app,
 	navigation = require('../navigation'),
 	meta = require('../meta'),
 	translator = require('../../public/src/modules/translator'),
+	utils = require('../../public/src/utils'),
 	user = require('../user'),
 	groups = require('../groups'),
 	db = require('../database'),
@@ -178,6 +179,7 @@ middleware.isAdmin = function(req, res, next) {
 middleware.buildHeader = function(req, res, next) {
 	res.locals.renderHeader = true;
 	res.locals.isAPI = false;
+	res.locals.config = res.locals.config ||{};
 
 	middleware.applyCSRF(req, res, function() {
 		async.parallel({
@@ -192,7 +194,7 @@ middleware.buildHeader = function(req, res, next) {
 				return next(err);
 			}
 
-			res.locals.config = results.config;
+			res.locals.config = utils.merge(res.locals.config,results.config);
 
 			translator.translate(results.footer, results.config.defaultLang, function(parsedTemplate) {
 				res.locals.footer = parsedTemplate;
