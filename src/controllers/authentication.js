@@ -180,7 +180,7 @@ function continueLogin(req, res, next) {
 				if (userData.uid) {
 					user.logIP(userData.uid, req.ip);
 
-					plugins.fireHook('action:user.loggedIn', userData.uid);
+					plugins.fireHook('action:user.loggedIn', {uid:userData.uid,req:req,res:res});
 				}
 
 				if (!req.session.returnTo) {
