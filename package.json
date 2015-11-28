@@ -52,6 +52,8 @@
     "nodebb-theme-persona": "2.0.13",
     "nodebb-theme-vanilla": "3.0.7",
     "nodebb-widget-essentials": "1.0.4",
+    "nodebb-theme-wechatpersona": "kmshi/nodebb-theme-wechatpersona.git#v0.7.x",
+    "nodebb-plugin-wechat-official-account":"kmshi/nodebb-plugin-wechat-official-account.git#sso",
     "npm": "^2.1.4",
     "passport": "^0.2.1",
     "passport-local": "1.0.0",
