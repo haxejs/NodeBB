@@ -44,7 +44,7 @@
     "nodebb-plugin-dbsearch": "0.2.15",
     "nodebb-plugin-emoji-extended": "0.4.9",
     "nodebb-plugin-markdown": "4.0.2",
-    "nodebb-plugin-mentions": "1.0.0",
+    "nodebb-plugin-mentions": "kmshi/nodebb-plugin-mentions.git",
     "nodebb-plugin-soundpack-default": "0.1.2",
     "nodebb-plugin-spam-be-gone": "0.4.1",
     "nodebb-rewards-essentials": "0.0.3",
