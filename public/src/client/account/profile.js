@@ -51,7 +51,7 @@ define('forum/account/profile', ['forum/account/header', 'forum/infinitescroll',
 		var isSelfOrNotLoggedIn = yourid === theirid || parseInt(yourid, 10) === 0;
 		$('#follow-btn').toggleClass('hide', isFollowing || isSelfOrNotLoggedIn);
 		$('#unfollow-btn').toggleClass('hide', !isFollowing || isSelfOrNotLoggedIn);
-		$('#chat-btn').toggleClass('hide', isSelfOrNotLoggedIn);
+		$('#chat-btn').toggleClass('hide', !isFollowing ||isSelfOrNotLoggedIn);
 	}
 
 	function toggleFollow(type) {

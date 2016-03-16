@@ -385,9 +385,9 @@ var db = require('./database'),
 	};
 
 	function sendNotifications(fromuid, touid, messageObj, callback) {
-		if (sockets.isUserOnline(touid)) {
-			return callback();
-		}
+		//if (sockets.isUserOnline(touid)) {
+		//	return callback();
+		//}
 
 		notifications.create({
 			bodyShort: '[[notifications:new_message_from, ' + messageObj.fromUser.username + ']]',
